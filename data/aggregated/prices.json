@@ -12,7 +12,8 @@
       "L40S"
     ],
     "primary_source": "Mercatus GPU Index",
-    "history_window": "90D"
+    "source_window": "90D",
+    "history_mode": "accumulated"
   },
   "benchmark_series": {
     "H100": [

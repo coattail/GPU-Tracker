@@ -13,7 +13,7 @@ const MODEL_COLORS = {
   L40S: "#a78bfa",
 };
 
-const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90 };
+const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
 
 function formatUsd(value) {
   if (!Number.isFinite(value)) return "--";
@@ -42,6 +42,7 @@ function earliestPoint(rows) {
 
 function rangePoints(points, range = activeRange) {
   const count = RANGE_DAYS[range] ?? RANGE_DAYS["90D"];
+  if (count === Infinity) return points;
   return points.slice(-Math.min(points.length, count + 1));
 }
 

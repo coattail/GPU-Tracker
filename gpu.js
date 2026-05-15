@@ -4,7 +4,7 @@ let activeRange = "90D";
 let activeModel;
 
 const SINGLE_SERIES_COLOR = "#dbeafe";
-const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90 };
+const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
 
 function formatUsd(value) {
   if (!Number.isFinite(value)) return "--";
@@ -33,6 +33,7 @@ function earliestPoint(rows) {
 
 function rangePoints(points, range = activeRange) {
   const count = RANGE_DAYS[range] ?? RANGE_DAYS["90D"];
+  if (count === Infinity) return points;
   return points.slice(-Math.min(points.length, count + 1));
 }
 
@@ -76,6 +77,9 @@ function createDetailChart(canvas, points) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      onResize() {
+        requestAnimationFrame(() => positionChartLegend(points));
+      },
       interaction: { mode: "index", intersect: false },
       plugins: {
         legend: { display: false },
@@ -118,6 +122,77 @@ function createDetailChart(canvas, points) {
       },
     },
   });
+}
+
+function positionChartLegend(points) {
+  const legend = document.getElementById("chartLegendBox");
+  const chart = detailChart;
+  if (!legend || !chart || !points.length) return;
+
+  const { chartArea, scales } = chart;
+  if (!chartArea || !scales?.x || !scales?.y) return;
+
+  const width = legend.offsetWidth || 176;
+  const height = legend.offsetHeight || 112;
+  const margin = 14;
+  const xSafety = 18;
+  const ySafety = 18;
+  const bottomAxisClearance = 28;
+
+  const candidates = [
+    {
+      name: "top-left",
+      left: chartArea.left + margin,
+      top: chartArea.top + margin,
+      xRange: [chartArea.left, chartArea.left + width + margin + xSafety],
+      yRange: [chartArea.top, chartArea.top + height + margin + ySafety],
+    },
+    {
+      name: "top-right",
+      left: chartArea.right - width - margin,
+      top: chartArea.top + margin,
+      xRange: [chartArea.right - width - margin - xSafety, chartArea.right],
+      yRange: [chartArea.top, chartArea.top + height + margin + ySafety],
+    },
+    {
+      name: "bottom-left",
+      left: chartArea.left + margin,
+      top: chartArea.bottom - height - margin - bottomAxisClearance,
+      xRange: [chartArea.left, chartArea.left + width + margin + xSafety],
+      yRange: [chartArea.bottom - height - margin - ySafety - bottomAxisClearance, chartArea.bottom],
+    },
+    {
+      name: "bottom-right",
+      left: chartArea.right - width - margin,
+      top: chartArea.bottom - height - margin - bottomAxisClearance,
+      xRange: [chartArea.right - width - margin - xSafety, chartArea.right],
+      yRange: [chartArea.bottom - height - margin - ySafety - bottomAxisClearance, chartArea.bottom],
+    },
+  ];
+
+  const pixels = points.map((point) => ({
+    x: scales.x.getPixelForValue(point.date),
+    y: scales.y.getPixelForValue(point.value),
+  }));
+
+  const scored = candidates.map((candidate) => {
+    const overlapCount = pixels.filter(
+      (pixel) =>
+        pixel.x >= candidate.xRange[0] &&
+        pixel.x <= candidate.xRange[1] &&
+        pixel.y >= candidate.yRange[0] &&
+        pixel.y <= candidate.yRange[1]
+    ).length;
+    const cornerBias = candidate.name.startsWith("top") ? 0 : 0.25;
+    return { ...candidate, score: overlapCount + cornerBias };
+  });
+
+  const best = scored.sort((a, b) => a.score - b.score)[0];
+  legend.dataset.position = best.name;
+  legend.style.left = `${best.left}px`;
+  legend.style.top = `${best.top}px`;
+  legend.style.right = "auto";
+  legend.style.bottom = "auto";
 }
 
 function renderMetrics(points) {
@@ -237,7 +312,7 @@ function renderDetail() {
   document.title = `${activeModel} · GPU 型号详情`;
   document.getElementById("detailLastUpdated").textContent = stats ? `最近刷新：${stats.end.date}` : "暂无刷新数据";
   document.getElementById("detailRangeLabel").textContent = `区间：${activeRange}`;
-  document.getElementById("detailHeroCopy").textContent = `${dashboardData.meta.primary_source} · 统一口径 · ${dashboardData.meta.currency} / ${dashboardData.meta.unit}`;
+  document.getElementById("detailHeroCopy").textContent = `${dashboardData.meta.primary_source} · 统一口径 · 自建历史持续累积 · ${dashboardData.meta.currency} / ${dashboardData.meta.unit}`;
   document.getElementById("detailChartTitle").textContent = `${activeModel} 价格走势`;
   document.getElementById("detailChartSubtitle").textContent = stats
     ? `${stats.start.date} → ${stats.end.date} · ${points.length} 点`
@@ -250,6 +325,7 @@ function renderDetail() {
   renderRecentMoves(points);
   if (detailChart) detailChart.destroy();
   detailChart = createDetailChart(document.getElementById("detailChart"), points);
+  requestAnimationFrame(() => positionChartLegend(points));
 }
 
 function updateRange(range) {

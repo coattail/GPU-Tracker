@@ -71,3 +71,23 @@ def merge_benchmark_series(
             for point in public_points
         ]
     return merged
+
+
+def accumulate_benchmark_history(
+    existing_series: dict[str, list[dict]],
+    benchmark_points: dict[str, Iterable[BenchmarkPoint]],
+    models: Iterable[str],
+) -> dict[str, list[dict]]:
+    accumulated: dict[str, list[dict]] = {}
+    for model in models:
+        by_date = {row["date"]: row for row in existing_series.get(model, []) if row.get("date")}
+        for point in benchmark_points.get(model, []):
+            by_date[point.date] = {
+                "date": point.date,
+                "value": point.value,
+                "source": point.source,
+                "quality": point.quality,
+                "note": "Unified 90-day public series",
+            }
+        accumulated[model] = [by_date[date] for date in sorted(by_date)]
+    return accumulated
