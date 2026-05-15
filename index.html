@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>云上 GPU 租金价格监控台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero terminal-frame">
+        <div>
+          <p class="eyebrow">GPU RENTAL TERMINAL</p>
+          <h1>云上 GPU 租金价格监控台</h1>
+          <p class="hero-copy">Mercatus GPU Index · 统一口径 · 同一历史窗口 · USD / GPU-hour</p>
+        </div>
+        <div class="hero-meta">
+          <span id="lastUpdated">数据尚未加载</span>
+          <span id="heroRange">区间：90D</span>
+        </div>
+      </header>
+
+      <section class="toolbar terminal-frame">
+        <div>
+          <h2>型号看板</h2>
+          <p>每个 GPU 型号一张行情图。</p>
+        </div>
+        <div class="range-switch" role="tablist" aria-label="时间区间">
+          <button data-range="7D" type="button">7D</button>
+          <button data-range="30D" type="button">30D</button>
+          <button data-range="90D" type="button" class="is-active">90D</button>
+        </div>
+      </section>
+
+      <section id="modelChartGrid" class="model-chart-grid"></section>
+
+      <section class="comparison-shell terminal-frame">
+        <div class="section-head comparison-head">
+          <div>
+            <p class="eyebrow">Cross-Model View</p>
+            <h2>型号比较</h2>
+          </div>
+          <p id="comparisonWindow">—</p>
+        </div>
+
+        <section class="grid comparison-grid">
+          <article class="nested-card compare-chart-card">
+            <div class="section-head">
+              <h3>价格比较</h3>
+              <p>USD / GPU-hour</p>
+            </div>
+            <div class="chart-wrap comparison-chart-wrap">
+              <canvas id="comparisonChart"></canvas>
+            </div>
+          </article>
+
+          <article class="nested-card ranking-card">
+            <div class="section-head">
+              <h3>涨幅排行</h3>
+              <p>当前区间</p>
+            </div>
+            <div id="rankingTable" class="ranking-table"></div>
+          </article>
+        </section>
+
+        <section id="premiumCards" class="premium-grid"></section>
+      </section>
+    </main>
+  </body>
+</html>

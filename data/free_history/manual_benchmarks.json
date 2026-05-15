@@ -1,0 +1,83 @@
+{
+  "H100": [
+    {
+      "date": "2023-07-15",
+      "value": 8.5,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "Mid-2023 public article described >$8/hr; plotted as conservative midpoint anchor."
+    },
+    {
+      "date": "2023-11-15",
+      "value": 6.5,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "Late-2023 article band $6-$7/hr; midpoint anchor."
+    },
+    {
+      "date": "2024-03-31",
+      "value": 5.5,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "H1 2024 article band $5-$6/hr; midpoint anchor."
+    },
+    {
+      "date": "2024-10-01",
+      "value": 4.0,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "Late-2024 article band $3.5-$4.5/hr; midpoint anchor."
+    },
+    {
+      "date": "2025-04-01",
+      "value": 2.75,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "2025 article band $2.5-$3/hr; midpoint anchor."
+    },
+    {
+      "date": "2025-11-01",
+      "value": 2.25,
+      "source": "Silicon Data article anchor",
+      "quality": "estimated_anchor",
+      "note": "Late-2025 article band $2-$2.5/hr; midpoint anchor."
+    }
+  ],
+  "B200": [
+    {
+      "date": "2026-01-01",
+      "value": 4.4,
+      "source": "Silicon Data article anchor",
+      "quality": "article_anchor",
+      "note": "Opened 2026 at 4.40."
+    },
+    {
+      "date": "2026-01-11",
+      "value": 4.29,
+      "source": "Silicon Data article anchor",
+      "quality": "article_anchor",
+      "note": "Year-to-date low cited in article."
+    },
+    {
+      "date": "2026-03-25",
+      "value": 6.11,
+      "source": "Silicon Data article anchor",
+      "quality": "article_anchor",
+      "note": "Peak cited in article."
+    },
+    {
+      "date": "2026-03-28",
+      "value": 6.08,
+      "source": "Silicon Data article anchor",
+      "quality": "article_anchor",
+      "note": "Value cited in article."
+    },
+    {
+      "date": "2026-03-30",
+      "value": 5.48,
+      "source": "Silicon Data article anchor",
+      "quality": "article_anchor",
+      "note": "Value cited in article."
+    }
+  ]
+}

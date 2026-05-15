@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPU 型号详情</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script defer src="gpu.js"></script>
+  </head>
+  <body>
+    <main class="page-shell detail-page-shell">
+      <header class="hero terminal-frame detail-hero">
+        <div>
+          <a class="back-link" href="index.html">← 返回型号看板</a>
+          <p class="eyebrow">GPU DETAIL</p>
+          <h1 id="detailModelTitle">GPU 型号详情</h1>
+          <p id="detailHeroCopy" class="hero-copy">统一口径 · USD / GPU-hour</p>
+        </div>
+        <div class="hero-meta detail-hero-meta">
+          <span id="detailLastUpdated">数据尚未加载</span>
+          <span id="detailRangeLabel">区间：90D</span>
+        </div>
+      </header>
+
+      <section class="terminal-frame detail-quote-strip">
+        <div class="quote-primary">
+          <span id="detailTicker">—</span>
+          <strong id="detailQuotePrice">--</strong>
+          <em id="detailQuoteChange">--</em>
+        </div>
+        <div id="detailQuoteStats" class="quote-secondary"></div>
+      </section>
+
+      <section class="toolbar terminal-frame detail-toolbar">
+        <div>
+          <h2>历史价格图</h2>
+          <p>大图展示关键节点，适合单型号复盘。</p>
+        </div>
+        <div class="range-switch" role="tablist" aria-label="时间区间">
+          <button data-range="7D" type="button">7D</button>
+          <button data-range="30D" type="button">30D</button>
+          <button data-range="90D" type="button" class="is-active">90D</button>
+        </div>
+      </section>
+
+      <section id="detailMetrics" class="detail-metric-grid"></section>
+
+      <section class="terminal-frame chart-panel">
+        <div class="chart-command-strip">
+          <span id="detailChartTicker">—</span>
+          <span>LINE CHART</span>
+        </div>
+        <div class="section-head detail-chart-head">
+          <div>
+            <h2 id="detailChartTitle">价格走势</h2>
+            <p id="detailChartSubtitle">—</p>
+          </div>
+        </div>
+        <div class="detail-chart-wrap">
+          <div id="chartLegendBox" class="chart-legend-box"></div>
+          <canvas id="detailChart"></canvas>
+        </div>
+      </section>
+
+      <section class="grid detail-grid">
+        <article class="terminal-frame detail-note-card">
+          <div class="section-head">
+            <h2>研究备注</h2>
+          </div>
+          <div id="detailNotes" class="detail-note-list"></div>
+        </article>
+
+        <article class="terminal-frame recent-table-card">
+          <div class="section-head">
+            <h2>最近日度变化</h2>
+            <p>最近 10 个观测日</p>
+          </div>
+          <div id="recentMoves" class="recent-moves"></div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
