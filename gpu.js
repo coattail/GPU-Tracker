@@ -53,6 +53,10 @@ function pointStats(points) {
   };
 }
 
+function modelTicker(model) {
+  return model.toUpperCase();
+}
+
 function createDetailChart(canvas, points) {
   const labels = points.map((point) => point.date);
   const values = points.map((point) => point.value);
@@ -216,7 +220,7 @@ function renderMetrics(points) {
 
 function renderQuoteStrip(points) {
   const stats = pointStats(points);
-  const ticker = activeModel.replace(/\s+/g, "").toUpperCase();
+  const ticker = modelTicker(activeModel);
   document.getElementById("detailTicker").textContent = ticker;
   document.getElementById("detailChartTicker").textContent = ticker;
   document.getElementById("detailQuotePrice").textContent = formatUsd(stats?.end.value);

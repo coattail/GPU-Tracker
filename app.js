@@ -152,7 +152,7 @@ function createComparisonChart(canvas) {
 }
 
 function modelTicker(model) {
-  return model.replace(/\s+/g, "").toUpperCase();
+  return model.toUpperCase();
 }
 
 function renderModelGrid() {
