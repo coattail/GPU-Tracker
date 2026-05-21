@@ -1,9 +1,9 @@
-name: Daily GPU price refresh
+name: Hourly GPU price refresh
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "20 1 * * *"
+    - cron: "20 * * * *"
 
 permissions:
   contents: write

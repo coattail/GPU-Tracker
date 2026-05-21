@@ -9,7 +9,8 @@
 - 同一来源覆盖：`H100`、`H200`、`B200`、`B300`、`A100 80GB`、`L40S`
 - 同一口径：`USD / GPU-hour`
 - 同一来源公开窗口：当前接口提供 `90D` 日线
-- 本地历史会在每日刷新后持续累积，不再只保留最近 90 天
+- 前端会优先请求 Mercatus 最新公开数据，失败时回退到仓库静态快照
+- 本地历史会在定时刷新后持续累积，不再只保留最近 90 天
 - 首页直接展示每个 GPU 型号的一张历史图
 - 支持 `7D / 30D / 90D / MAX` 区间切换
 - 点击任一型号卡片，可进入该型号的独立详情页
@@ -46,18 +47,19 @@ python3 scripts/refresh_data.py
 python3 scripts/refresh_data.py
 ```
 
-## 每日自动更新
+## 准实时与自动更新
 
-仓库内置 GitHub Actions 工作流：
+仓库内置两层更新机制：
 
-- 文件：`.github/workflows/daily-refresh.yml`
-- 频率：每天一次
-- 时间：UTC `01:20`（北京时间 `09:20`）
+- 前端打开页面时，优先直接请求 `Mercatus GPU Index` 最新 `90D` 日线数据，并与仓库已累积历史合并
+- 如果实时请求失败，页面自动回退到 `data/aggregated/prices.json` 静态快照
+- GitHub Actions 文件：`.github/workflows/daily-refresh.yml`
+- 频率：每小时一次，UTC 每小时 `:20` 左右触发；实际运行时间可能受 GitHub Actions 排队影响
 - 行为：
   - 安装依赖
   - 运行 `python3 scripts/refresh_data.py`
   - 当数据有变化时，自动提交 `data/raw` 与 `data/aggregated`
-  - 将新抓取的滚动 `90D` 数据与仓库中已有历史合并，按日期去重并持续累积
+  - 将新抓取的滚动 `90D` 数据与仓库中已有历史合并，按日期去重并持续累积，作为实时请求失败时的兜底数据
 
 ## 目录结构
 

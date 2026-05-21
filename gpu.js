@@ -341,8 +341,7 @@ function updateRange(range) {
 }
 
 async function init() {
-  const response = await fetch("data/aggregated/prices.json");
-  dashboardData = await response.json();
+  dashboardData = await window.GpuDataLoader.loadDashboardData();
   const params = new URLSearchParams(window.location.search);
   const requestedModel = params.get("model");
   const requestedRange = params.get("range");

@@ -256,8 +256,7 @@ function updateRange(range) {
 }
 
 async function init() {
-  const response = await fetch("data/aggregated/prices.json");
-  dashboardData = await response.json();
+  dashboardData = await window.GpuDataLoader.loadDashboardData();
   const firstSeries = dashboardData.benchmark_series[dashboardData.meta.tracked_gpu_models[0]] || [];
   document.getElementById("lastUpdated").textContent = firstSeries.length
     ? `最近刷新：${latestPoint(firstSeries).date}`
