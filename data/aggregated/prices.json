@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-05-22",
+    "generated_at": "2026-05-23",
     "currency": "USD",
     "unit": "GPU-hour",
     "tracked_gpu_models": [
@@ -702,6 +702,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
+        "value": 3.3384,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "H200": [
@@ -1387,6 +1394,13 @@
       {
         "date": "2026-05-22",
         "value": 3.9523,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
+        "value": 3.9777,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
@@ -2078,6 +2092,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
+        "value": 5.4074,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "B300": [
@@ -2762,6 +2783,13 @@
       },
       {
         "date": "2026-05-22",
+        "value": 7.8813,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
         "value": 7.8813,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
@@ -3454,6 +3482,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
+        "value": 1.8324,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "L40S": [
@@ -4139,6 +4174,13 @@
       {
         "date": "2026-05-22",
         "value": 1.276,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-05-23",
+        "value": 1.2667,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
