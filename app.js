@@ -11,6 +11,8 @@ const MODEL_COLORS = {
   B300: "#fb7185",
   "A100 80GB": "#34d399",
   L40S: "#a78bfa",
+  "RTX 4090": "#22d3ee",
+  "RTX 5090": "#f472b6",
 };
 
 const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
@@ -234,6 +236,8 @@ function renderComparison() {
     { label: "H200 / H100", value: current.H200 / current.H100 },
     { label: "H100 / A100 80GB", value: current.H100 / current["A100 80GB"] },
     { label: "H100 / L40S", value: current.H100 / current.L40S },
+    { label: "RTX 5090 / RTX 4090", value: current["RTX 5090"] / current["RTX 4090"] },
+    { label: "RTX 4090 / H100", value: current["RTX 4090"] / current.H100 },
   ];
   document.getElementById("premiumCards").innerHTML = premiums
     .map((item) => `

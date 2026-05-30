@@ -14,6 +14,8 @@
     B300: "B300",
     "A100 80GB": "A100_80GB",
     L40S: "L40S",
+    "RTX 4090": "RTX_4090",
+    "RTX 5090": "RTX_5090",
   };
 
   function defaultCacheBust() {

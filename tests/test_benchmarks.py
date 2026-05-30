@@ -1,6 +1,6 @@
 import unittest
 
-from gpu_monitor.benchmarks import BenchmarkPoint, accumulate_benchmark_history, merge_benchmark_series
+from gpu_monitor.benchmarks import BenchmarkPoint, MERCATUS_MODEL_MAP, accumulate_benchmark_history, merge_benchmark_series
 
 
 class BenchmarkTests(unittest.TestCase):
@@ -47,3 +47,7 @@ class BenchmarkTests(unittest.TestCase):
         )
         self.assertEqual([row["date"] for row in accumulated["H100"]], ["2026-02-13", "2026-05-14", "2026-05-15"])
         self.assertEqual(accumulated["H100"][1]["value"], 3.25)
+
+    def test_tracks_rtx_4090_and_5090_mercatus_series(self):
+        self.assertEqual(MERCATUS_MODEL_MAP["RTX 4090"], "RTX_4090")
+        self.assertEqual(MERCATUS_MODEL_MAP["RTX 5090"], "RTX_5090")
