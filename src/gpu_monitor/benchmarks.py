@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -34,12 +35,16 @@ def collect_mercatus_benchmarks(
     session = session or requests.Session()
     result: dict[str, list[BenchmarkPoint]] = {}
     for model, mercatus_model in MERCATUS_MODEL_MAP.items():
-        response = session.get(
-            "https://www.mercatus-ai.com/api/gpu/trend",
-            params={"range": range_name, "baseModel": mercatus_model},
-            timeout=30,
-        )
-        response.raise_for_status()
+        try:
+            response = session.get(
+                "https://www.mercatus-ai.com/api/gpu/trend",
+                params={"range": range_name, "baseModel": mercatus_model},
+                timeout=30,
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException as exc:
+            print(f"Skipping Mercatus benchmark for {model}: {exc}", file=sys.stderr)
+            continue
         payload = response.json()
         if not payload.get("success"):
             raise RuntimeError(payload.get("error", {}).get("message") or "Mercatus API failed")

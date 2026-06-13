@@ -1,9 +1,56 @@
 import unittest
+from contextlib import redirect_stderr
+from io import StringIO
 
-from gpu_monitor.benchmarks import BenchmarkPoint, MERCATUS_MODEL_MAP, accumulate_benchmark_history, merge_benchmark_series
+import requests
+
+from gpu_monitor.benchmarks import (
+    BenchmarkPoint,
+    MERCATUS_MODEL_MAP,
+    accumulate_benchmark_history,
+    collect_mercatus_benchmarks,
+    merge_benchmark_series,
+)
+
+
+class FakeMercatusResponse:
+    def raise_for_status(self):
+        return None
+
+    def json(self):
+        return {
+            "success": True,
+            "data": [
+                {
+                    "fetchDate": "2026-06-10T00:00:00Z",
+                    "currentPrice": 2.5,
+                }
+            ],
+        }
+
+
+class TimeoutThenSuccessSession:
+    def __init__(self):
+        self.calls = 0
+
+    def get(self, *args, **kwargs):
+        self.calls += 1
+        if self.calls == 1:
+            raise requests.exceptions.ReadTimeout("Mercatus timed out")
+        return FakeMercatusResponse()
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_collect_mercatus_skips_timed_out_models(self):
+        stderr = StringIO()
+        with redirect_stderr(stderr):
+            series = collect_mercatus_benchmarks(session=TimeoutThenSuccessSession())
+
+        self.assertNotIn("H100", series)
+        self.assertIn("H200", series)
+        self.assertEqual(series["H200"][0].value, 2.5)
+        self.assertIn("Skipping Mercatus benchmark for H100", stderr.getvalue())
+
     def test_uses_only_unified_benchmark_points(self):
         merged = merge_benchmark_series(
             {"H100": [BenchmarkPoint("2026-05-14", 3.2, "Mercatus GPU Index")]},
