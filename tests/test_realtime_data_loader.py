@@ -120,6 +120,26 @@ class RefreshWorkflowTests(unittest.TestCase):
     def test_github_action_refreshes_hourly(self):
         workflow = (ROOT / ".github" / "workflows" / "daily-refresh.yml").read_text(encoding="utf-8")
         self.assertIn('cron: "20 * * * *"', workflow)
+        self.assertIn("group: gpu-price-refresh", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("runs-on: ubuntu-24.04", workflow)
+        self.assertIn("timeout-minutes: 10", workflow)
+        self.assertIn("bash scripts/refresh_and_publish.sh", workflow)
+
+    def test_failed_scheduled_refresh_has_guarded_recovery(self):
+        workflow = (ROOT / ".github" / "workflows" / "refresh-recovery.yml").read_text(encoding="utf-8")
+        self.assertIn('workflows: ["Hourly GPU price refresh"]', workflow)
+        self.assertIn("github.event.workflow_run.conclusion == 'failure'", workflow)
+        self.assertIn("github.event.workflow_run.event == 'schedule'", workflow)
+        self.assertIn("latest_success_id > FAILED_RUN_ID", workflow)
+        self.assertIn("group: gpu-price-refresh", workflow)
+        self.assertIn("bash scripts/refresh_and_publish.sh", workflow)
+
+    def test_publish_script_retries_without_staging_unrelated_files(self):
+        script = (ROOT / "scripts" / "refresh_and_publish.sh").read_text(encoding="utf-8")
+        self.assertIn("git add -- data/raw data/aggregated", script)
+        self.assertIn("for attempt in 1 2 3", script)
+        self.assertIn("git push origin HEAD:main", script)
 
 
 if __name__ == "__main__":

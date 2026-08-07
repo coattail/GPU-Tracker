@@ -1,0 +1,59 @@
+name: GPU price refresh recovery
+
+on:
+  workflow_run:
+    workflows: ["Hourly GPU price refresh"]
+    types: [completed]
+
+concurrency:
+  group: gpu-price-refresh
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  recover:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.event == 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check whether a later run already recovered
+        id: recovery_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FAILED_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          latest_success_id="$(
+            gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/workflows/daily-refresh.yml/runs?status=success&per_page=1" \
+              --jq '.workflow_runs[0].id // 0' 2>/dev/null || echo 0
+          )"
+
+          if [[ "$latest_success_id" =~ ^[0-9]+$ ]] && (( latest_success_id > FAILED_RUN_ID )); then
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+            echo "A later scheduled refresh already succeeded; recovery is not needed." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+            echo "No later successful refresh was found; running recovery." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/checkout@v6
+        if: steps.recovery_guard.outputs.needed == 'true'
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        if: steps.recovery_guard.outputs.needed == 'true'
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        if: steps.recovery_guard.outputs.needed == 'true'
+        run: python3 -m pip install --retries 5 --timeout 60 -r requirements.txt
+      - name: Recover refresh and publish prices
+        if: steps.recovery_guard.outputs.needed == 'true'
+        run: bash scripts/refresh_and_publish.sh

@@ -60,6 +60,14 @@ python3 scripts/refresh_data.py
   - 运行 `python3 scripts/refresh_data.py`
   - 当数据有变化时，自动提交 `data/raw` 与 `data/aggregated`
   - 将新抓取的滚动 `90D` 数据与仓库中已有历史合并，按日期去重并持续累积，作为实时请求失败时的兜底数据
+  - 所有正常刷新与恢复刷新共用一个并发锁，延迟到达的任务不会同时写入 `main`
+  - 数据推送遇到瞬时网络故障时最多重试 3 次，并在重试前同步最新的 `main`
+- 自动恢复文件：`.github/workflows/refresh-recovery.yml`
+  - 定时刷新失败后自动触发一次恢复检查
+  - 如果已有更新的成功运行则直接跳过，避免重复刷新
+  - 如果仍未恢复则补跑刷新；因此 GitHub 托管 Runner 暂时不可用时，Runner 恢复后可自动补偿
+
+> GitHub 托管 Runner 在任务开始前发生的平台故障时，原失败记录仍会保留；仓库内的恢复流程负责降低数据停更影响，但无法消除 GitHub 平台自身的故障记录。
 
 ## 目录结构
 
