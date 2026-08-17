@@ -182,8 +182,8 @@ h2 { margin-bottom: 4px; }
 .mini-stats > span {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 6px;
+  justify-content: center;
+  gap: 5px;
 }
 
 .mini-stats small {
