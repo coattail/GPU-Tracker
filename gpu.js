@@ -19,6 +19,7 @@ function formatAxisUsd(value) {
 
 function formatPct(value) {
   if (!Number.isFinite(value)) return "--";
+  if (Math.abs(value * 100) < 0.05) return "0.0%";
   const sign = value >= 0 ? "+" : "";
   return `${sign}${(value * 100).toFixed(1)}%`;
 }

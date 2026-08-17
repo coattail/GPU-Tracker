@@ -172,10 +172,28 @@ h2 { margin-bottom: 4px; }
 .mini-chart-wrap { height: 242px; }
 
 .mini-stats {
-  display: flex;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   border-top: 1px solid var(--line);
   padding-top: 10px;
+}
+
+.mini-stats > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.mini-stats small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.mini-stats strong {
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .comparison-shell {

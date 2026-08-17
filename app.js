@@ -16,6 +16,7 @@ const MODEL_COLORS = {
 };
 
 const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
+const REPRESENTATIVE_RANGES = ["7D", "30D", "90D"];
 
 function formatUsd(value) {
   if (!Number.isFinite(value)) return "--";
@@ -30,6 +31,7 @@ function formatAxisUsd(value) {
 
 function formatPct(value) {
   if (!Number.isFinite(value)) return "--";
+  if (Math.abs(value * 100) < 0.05) return "0.0%";
   const sign = value >= 0 ? "+" : "";
   return `${sign}${(value * 100).toFixed(1)}%`;
 }
@@ -164,8 +166,13 @@ function renderModelGrid() {
   miniCharts.clear();
 
   dashboardData.meta.tracked_gpu_models.forEach((model) => {
-    const points = rangePoints(dashboardData.benchmark_series[model] || []);
+    const allPoints = dashboardData.benchmark_series[model] || [];
+    const points = rangePoints(allPoints);
     const stats = pointStats(points);
+    const representativeChanges = REPRESENTATIVE_RANGES.map((range) => ({
+      range,
+      changePct: pointStats(rangePoints(allPoints, range))?.changePct,
+    }));
     const card = document.createElement("article");
     card.className = "terminal-frame model-card";
     card.dataset.model = model;
@@ -187,9 +194,14 @@ function renderModelGrid() {
       </div>
       <div class="mini-chart-wrap"><canvas></canvas></div>
       <div class="mini-stats">
-        <span>H ${formatUsd(stats?.max)}</span>
-        <span>L ${formatUsd(stats?.min)}</span>
-        <span>AVG ${formatUsd(stats?.avg)}</span>
+        ${representativeChanges
+          .map(({ range, changePct }) => `
+            <span>
+              <small>${range}</small>
+              <strong class="${Number.isFinite(changePct) ? (changePct >= 0 ? "up" : "down") : ""}">${formatPct(changePct)}</strong>
+            </span>
+          `)
+          .join("")}
       </div>
     `;
     card.addEventListener("click", () => {
