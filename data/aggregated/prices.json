@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-19",
+    "generated_at": "2026-08-20",
     "currency": "USD",
     "unit": "GPU-hour",
     "tracked_gpu_models": [
@@ -1327,6 +1327,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 3.8337,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "H200": [
@@ -2638,6 +2645,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 4.4985,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "B200": [
@@ -3945,6 +3959,13 @@
       },
       {
         "date": "2026-08-19",
+        "value": 6.4362,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
         "value": 6.4362,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
@@ -5260,6 +5281,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 8.6393,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "A100 80GB": [
@@ -6568,6 +6596,13 @@
       {
         "date": "2026-08-19",
         "value": 2.0483,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 2.0459,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
@@ -7882,6 +7917,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 1.3895,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "RTX 4090": [
@@ -9088,6 +9130,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 0.4887,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
       }
     ],
     "RTX 5090": [
@@ -10291,6 +10340,13 @@
       {
         "date": "2026-08-19",
         "value": 0.7012,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified 90-day public series"
+      },
+      {
+        "date": "2026-08-20",
+        "value": 0.6985,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified 90-day public series"
