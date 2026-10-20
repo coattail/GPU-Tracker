@@ -117,6 +117,9 @@
     const cacheBust = options.cacheBust || defaultCacheBust;
     const staticPayload = await loadStaticPayload({ fetchFn, cacheBust });
     const models = trackedModelsFrom(staticPayload);
+    if (typeof options.onStaticData === "function") {
+      options.onStaticData(withMeta(staticPayload, staticPayload.benchmark_series || {}, "cached"));
+    }
 
     try {
       const liveSeries = await collectMercatusSeries({ fetchFn, models });

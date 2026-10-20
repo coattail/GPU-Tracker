@@ -110,10 +110,44 @@ class RealtimeDataLoaderTests(unittest.TestCase):
         )
         run_node(script)
 
+    def test_paints_cached_data_before_slow_live_request_completes(self):
+        run_node(textwrap.dedent(r"""
+            const assert = require('assert');
+            const loader = require('./data-loader.js');
+            const cached = {
+              meta: { tracked_gpu_models: ['H100'] },
+              benchmark_series: { H100: [{ date: '2026-10-19', value: 3.3 }] }
+            };
+            let finishLive;
+            let firstPaint;
+            const fetchFn = async (url) => {
+              if (String(url).startsWith('data/aggregated/prices.json')) {
+                return { ok: true, json: async () => cached };
+              }
+              return new Promise(resolve => { finishLive = resolve; });
+            };
+            (async () => {
+              const pending = loader.loadDashboardData({
+                fetchFn,
+                onStaticData: payload => { firstPaint = payload; }
+              });
+              await new Promise(resolve => setImmediate(resolve));
+              assert.strictEqual(firstPaint.meta.refresh_mode, 'cached');
+              assert.strictEqual(firstPaint.benchmark_series.H100[0].value, 3.3);
+              finishLive({ ok: true, json: async () => ({ success: true, data: [
+                { fetchDate: '2026-10-20', currentPrice: 3.4 }
+              ] }) });
+              const refreshed = await pending;
+              assert.strictEqual(refreshed.meta.refresh_mode, 'realtime');
+              assert.strictEqual(refreshed.benchmark_series.H100.at(-1).value, 3.4);
+              assert.strictEqual(firstPaint.benchmark_series.H100.length, 1);
+            })().catch(error => { console.error(error); process.exit(1); });
+        """))
+
     def test_pages_load_data_loader_before_page_scripts(self):
         for html_file, page_script in [("index.html", "app.js"), ("gpu.html", "gpu.js")]:
             html = (ROOT / html_file).read_text(encoding="utf-8")
-            self.assertLess(html.index('src="data-loader.js"'), html.index(f'src="{page_script}"'))
+            self.assertLess(html.index('src="data-loader.js'), html.index(f'src="{page_script}'))
 
 
 class RefreshWorkflowTests(unittest.TestCase):

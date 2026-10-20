@@ -272,15 +272,22 @@ function updateRange(range) {
 }
 
 async function init() {
-  dashboardData = await window.GpuDataLoader.loadDashboardData();
-  const firstSeries = dashboardData.benchmark_series[dashboardData.meta.tracked_gpu_models[0]] || [];
-  document.getElementById("lastUpdated").textContent = firstSeries.length
-    ? `最近刷新：${latestPoint(firstSeries).date}`
-    : "暂无刷新数据";
-  document.querySelectorAll(".range-switch button").forEach((button) => {
-    button.addEventListener("click", () => updateRange(button.dataset.range));
-  });
-  updateRange(activeRange);
+  let controlsReady = false;
+  const applyData = (payload) => {
+    dashboardData = payload;
+    const firstSeries = dashboardData.benchmark_series[dashboardData.meta.tracked_gpu_models[0]] || [];
+    document.getElementById("lastUpdated").textContent = firstSeries.length
+      ? `最近刷新：${latestPoint(firstSeries).date}`
+      : "暂无刷新数据";
+    if (!controlsReady) {
+      document.querySelectorAll(".range-switch button").forEach((button) => {
+        button.addEventListener("click", () => updateRange(button.dataset.range));
+      });
+      controlsReady = true;
+    }
+    updateRange(activeRange);
+  };
+  applyData(await window.GpuDataLoader.loadDashboardData({ onStaticData: applyData }));
 }
 
 init().catch((error) => {

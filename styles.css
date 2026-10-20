@@ -515,3 +515,46 @@ h2 { margin-bottom: 4px; }
     gap: 6px;
   }
 }
+
+/* Mobile browser and embedded WebView layout. Keep page zoom available. */
+@media (max-width: 760px), (max-width: 1024px) and (max-height: 600px) and (pointer: coarse) {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: 16px; min-width: 0; max-width: 100%; }
+  button, select, a { touch-action: manipulation; }
+  button, select { min-height: 44px; }
+  input[type="range"] { touch-action: pan-y; }
+  .table-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+}
+
+@media (max-width: 760px), (max-width: 1024px) and (max-height: 600px) and (pointer: coarse) {
+  .page-shell { width: 100%; padding: 10px max(10px, env(safe-area-inset-left)) 24px max(10px, env(safe-area-inset-right)); gap: 12px; }
+  .page-shell > *, .model-card, .compare-chart-card, .ranking-card, .chart-wrap { min-width: 0; }
+  .hero, .toolbar, .comparison-shell { padding: 14px; gap: 12px; }
+  h1 { font-size: 24px; line-height: 1.35; }
+  .hero-copy { font-size: 13px; line-height: 1.6; margin-bottom: 0; }
+  .range-switch { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+  .range-switch button { font-size: 14px; }
+  .detail-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-metric-card:last-child { grid-column: 1 / -1; }
+  .detail-metric-card strong { font-size: 21px; }
+  .quote-primary { flex-direction: row; flex-wrap: wrap; align-items: baseline; }
+  .mini-chart-wrap { height: 220px; }
+  .detail-chart-wrap { height: 360px; }
+  .comparison-chart-wrap { height: 300px; }
+  .mini-stats { gap: 4px; }
+  .mini-stats > span { flex-wrap: wrap; gap: 2px 5px; }
+  .recent-move-row { gap: 6px; font-size: 12px; grid-template-columns: 1.1fr repeat(3, minmax(0, 1fr)); }
+  .back-link { min-height: 44px; display: inline-flex; align-items: center; }
+  .chart-legend-box { min-width: 0; max-width: calc(100% - 28px); font-size: 11px; }
+  canvas { touch-action: pan-y; }
+}
+
+@media (max-width: 760px), (max-width: 1024px) and (max-height: 600px) and (pointer: coarse) {
+  .detail-page-shell > * { order: 5; }
+  .detail-page-shell > .detail-hero { order: 0; }
+  .detail-page-shell > .detail-quote-strip { order: 1; }
+  .detail-page-shell > .detail-toolbar { order: 2; }
+  .detail-page-shell > .chart-panel { order: 3; }
+  .detail-page-shell > .detail-metric-grid { order: 4; }
+}

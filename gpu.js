@@ -342,18 +342,25 @@ function updateRange(range) {
 }
 
 async function init() {
-  dashboardData = await window.GpuDataLoader.loadDashboardData();
+  let controlsReady = false;
   const params = new URLSearchParams(window.location.search);
   const requestedModel = params.get("model");
   const requestedRange = params.get("range");
-  activeModel = dashboardData.meta.tracked_gpu_models.includes(requestedModel)
-    ? requestedModel
-    : dashboardData.meta.tracked_gpu_models[0];
-  activeRange = RANGE_DAYS[requestedRange] ? requestedRange : activeRange;
-  document.querySelectorAll(".range-switch button").forEach((button) => {
-    button.addEventListener("click", () => updateRange(button.dataset.range));
-  });
-  updateRange(activeRange);
+  const applyData = (payload) => {
+    dashboardData = payload;
+    if (!controlsReady) {
+      activeModel = dashboardData.meta.tracked_gpu_models.includes(requestedModel)
+        ? requestedModel
+        : dashboardData.meta.tracked_gpu_models[0];
+      activeRange = RANGE_DAYS[requestedRange] ? requestedRange : activeRange;
+      document.querySelectorAll(".range-switch button").forEach((button) => {
+        button.addEventListener("click", () => updateRange(button.dataset.range));
+      });
+      controlsReady = true;
+    }
+    updateRange(activeRange);
+  };
+  applyData(await window.GpuDataLoader.loadDashboardData({ onStaticData: applyData }));
 }
 
 init().catch((error) => {
