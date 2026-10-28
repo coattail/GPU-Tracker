@@ -15,7 +15,7 @@ const MODEL_COLORS = {
   "RTX 5090": "#f472b6",
 };
 
-const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
+const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, "180D": 180, MAX: Infinity };
 const REPRESENTATIVE_RANGES = ["7D", "30D", "90D"];
 
 function formatUsd(value) {

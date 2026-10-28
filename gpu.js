@@ -4,7 +4,7 @@ let activeRange = "90D";
 let activeModel;
 
 const SINGLE_SERIES_COLOR = "#dbeafe";
-const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, MAX: Infinity };
+const RANGE_DAYS = { "7D": 7, "30D": 30, "90D": 90, "180D": 180, MAX: Infinity };
 
 function formatUsd(value) {
   if (!Number.isFinite(value)) return "--";
