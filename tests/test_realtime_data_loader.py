@@ -25,7 +25,7 @@ class RealtimeDataLoaderTests(unittest.TestCase):
                 unit: 'GPU-hour',
                 tracked_gpu_models: ['H100'],
                 primary_source: 'Mercatus GPU Index',
-                source_window: '90D',
+                source_window: 'ALL',
                 history_mode: 'accumulated'
               },
               benchmark_series: {
@@ -42,11 +42,13 @@ class RealtimeDataLoaderTests(unittest.TestCase):
                 return { ok: true, json: async () => staticPayload };
               }
               if (href.includes('mercatus-ai.com/api/gpu/trend') && href.includes('baseModel=H100')) {
+                assert.strictEqual(new URL(href).searchParams.get('range'), 'ALL');
                 return {
                   ok: true,
                   json: async () => ({
                     success: true,
                     data: [
+                      { fetchDate: '2025-12-21T00:00:00.000Z', currentPrice: 3.0 },
                       { fetchDate: '2026-05-20T00:00:00.000Z', currentPrice: 3.31 },
                       { fetchDate: '2026-05-21T00:00:00.000Z', currentPrice: 3.21 }
                     ]
@@ -62,7 +64,7 @@ class RealtimeDataLoaderTests(unittest.TestCase):
               assert.strictEqual(payload.meta.refresh_mode, 'realtime');
               assert.deepStrictEqual(
                 payload.benchmark_series.H100.map((row) => [row.date, row.value]),
-                [['2026-05-19', 3.4], ['2026-05-20', 3.31], ['2026-05-21', 3.21]]
+                [['2025-12-21', 3.0], ['2026-05-19', 3.4], ['2026-05-20', 3.31], ['2026-05-21', 3.21]]
               );
             })().catch((error) => {
               console.error(error);

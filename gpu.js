@@ -253,6 +253,7 @@ function renderChartLegend(points) {
 }
 
 function renderNotes(points) {
+  const allPoints = dashboardData.benchmark_series[activeModel] || [];
   const stats = pointStats(points);
   const h100Points = rangePoints(dashboardData.benchmark_series.H100 || []);
   const h100Latest = latestPoint(h100Points)?.value;
@@ -265,6 +266,7 @@ function renderNotes(points) {
     ["计价口径", `${dashboardData.meta.currency} / ${dashboardData.meta.unit}`],
     ["当前窗口", `${stats?.start.date ?? "--"} → ${stats?.end.date ?? "--"}`],
     ["样本点数", `${points.length} 点`],
+    ["全部历史", allPoints.length ? `${allPoints[0].date} → ${latestPoint(allPoints).date} · ${allPoints.length} 点` : "--"],
     ["相对 H100", premiumToH100 ? `${premiumToH100.toFixed(2)}x` : "基准型号"],
     ["数据备注", latestPoint(points)?.note || "—"],
   ];

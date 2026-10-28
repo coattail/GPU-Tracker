@@ -41,6 +41,21 @@ class TimeoutThenSuccessSession:
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_requests_all_history_by_default(self):
+        class RecordingSession:
+            def __init__(self):
+                self.ranges = []
+
+            def get(self, *args, **kwargs):
+                self.ranges.append(kwargs["params"]["range"])
+                return FakeMercatusResponse()
+
+        session = RecordingSession()
+        series = collect_mercatus_benchmarks(session=session)
+        self.assertEqual(set(series), set(MERCATUS_MODEL_MAP))
+        self.assertEqual(session.ranges, ["ALL"] * len(MERCATUS_MODEL_MAP))
+
+
     def test_collect_mercatus_skips_timed_out_models(self):
         stderr = StringIO()
         with redirect_stderr(stderr):
@@ -86,14 +101,15 @@ class BenchmarkTests(unittest.TestCase):
             },
             {
                 "H100": [
+                    BenchmarkPoint("2025-12-21", 3.0, "Mercatus GPU Index"),
                     BenchmarkPoint("2026-05-14", 3.25, "Mercatus GPU Index"),
                     BenchmarkPoint("2026-05-15", 3.3, "Mercatus GPU Index"),
                 ]
             },
             ["H100"],
         )
-        self.assertEqual([row["date"] for row in accumulated["H100"]], ["2026-02-13", "2026-05-14", "2026-05-15"])
-        self.assertEqual(accumulated["H100"][1]["value"], 3.25)
+        self.assertEqual([row["date"] for row in accumulated["H100"]], ["2025-12-21", "2026-02-13", "2026-05-14", "2026-05-15"])
+        self.assertEqual(accumulated["H100"][2]["value"], 3.25)
 
     def test_tracks_rtx_4090_and_5090_mercatus_series(self):
         self.assertEqual(MERCATUS_MODEL_MAP["RTX 4090"], "RTX_4090")

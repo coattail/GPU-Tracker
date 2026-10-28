@@ -12,7 +12,9 @@ async (page) => {
       await page.route('https://www.mercatus-ai.com/api/gpu/trend**', async route => {
         await gate;
         if (scenario === 'failure') return route.abort();
-        const key = new URL(route.request().url()).searchParams.get('baseModel');
+        const requestUrl = new URL(route.request().url());
+        if (requestUrl.searchParams.get('range') !== 'ALL') throw new Error('Live requests must include all history');
+        const key = requestUrl.searchParams.get('baseModel');
         const model = snapshot.meta.tracked_gpu_models.find(model => model.replaceAll(' ', '_') === key);
         const rows = snapshot.benchmark_series[model];
         return route.fulfill({ json: { success: true, data: rows.map((row, index) => ({
@@ -59,7 +61,26 @@ async (page) => {
         await page.waitForFunction(() => !!document.getElementById('chartLegendBox').style.left);
         await page.setViewportSize({ width: 1280, height: 900 });
       }
-      results.push({ path, scenario, chartInstancesRetained: state.count, delta: state.delta });
+      await page.getByRole('button', { name: 'MAX', exact: true }).click();
+      const fullHistory = await page.evaluate(() => Object.values(Chart.instances).map(chart => ({
+        model: chart.canvas.id === 'comparisonChart' ? 'H100' : chart.canvas.closest('.model-card')?.dataset.model || activeModel,
+        first: chart.data.labels[0], count: chart.data.labels.length
+      })));
+      const expectedRows = snapshot.benchmark_series.H100;
+      if (fullHistory.some(chart => {
+        const rows = snapshot.benchmark_series[chart.model];
+        return chart.first !== rows[0].date || chart.count !== rows.length;
+      })) {
+        throw new Error(`MAX history incomplete: ${JSON.stringify(fullHistory)}`);
+      }
+      if (path === 'index.html') {
+        const coverage = await page.locator('#historyCoverage').textContent();
+        if (!coverage.includes(expectedRows[0].date)) throw new Error(`Missing coverage: ${coverage}`);
+      } else {
+        const notes = await page.locator('#detailNotes').textContent();
+        if (!notes.includes(expectedRows[0].date)) throw new Error(`Missing history note: ${notes}`);
+      }
+      results.push({ path, scenario, chartInstancesRetained: state.count, delta: state.delta, fullHistory });
       await page.unroute('https://www.mercatus-ai.com/api/gpu/trend**');
     }
   }

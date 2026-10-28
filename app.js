@@ -305,6 +305,12 @@ async function init() {
     document.getElementById("lastUpdated").textContent = firstSeries.length
       ? `最近刷新：${latestPoint(firstSeries).date}`
       : "暂无刷新数据";
+    const firstDates = dashboardData.meta.tracked_gpu_models
+      .map((model) => dashboardData.benchmark_series[model]?.[0]?.date)
+      .filter(Boolean).sort();
+    document.getElementById("historyCoverage").textContent = firstDates.length
+      ? `最早历史：${firstDates[0]} · 点击 MAX 查看全部历史。`
+      : "暂无历史数据";
     if (!controlsReady) {
       document.querySelectorAll(".range-switch button").forEach((button) => {
         button.addEventListener("click", () => updateRange(button.dataset.range));
