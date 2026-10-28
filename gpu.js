@@ -83,7 +83,7 @@ function createDetailChart(canvas, points) {
       responsive: true,
       maintainAspectRatio: false,
       onResize() {
-        requestAnimationFrame(() => positionChartLegend(points));
+        requestAnimationFrame(() => positionChartLegend(rangePoints(dashboardData.benchmark_series[activeModel] || [])));
       },
       interaction: { mode: "index", intersect: false },
       plugins: {
@@ -328,8 +328,14 @@ function renderDetail() {
   renderChartLegend(points);
   renderNotes(points);
   renderRecentMoves(points);
-  if (detailChart) detailChart.destroy();
-  detailChart = createDetailChart(document.getElementById("detailChart"), points);
+  if (detailChart) {
+    detailChart.data.labels = points.map((point) => point.date);
+    detailChart.data.datasets[0].data = points.map((point) => point.value);
+    detailChart.options.scales.x.ticks.maxTicksLimit = activeRange === "7D" ? 8 : 12;
+    detailChart.update("none");
+  } else {
+    detailChart = createDetailChart(document.getElementById("detailChart"), points);
+  }
   requestAnimationFrame(() => positionChartLegend(points));
 }
 
