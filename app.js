@@ -142,6 +142,16 @@ function createComparisonChart(canvas) {
       fill: false,
     };
   });
+  if (comparisonChart) {
+    comparisonChart.data.labels = labels;
+    // Keep dataset identities (and the user's legend visibility choices).
+    comparisonChart.data.datasets = datasets.map((dataset) => {
+      const existing = comparisonChart.data.datasets.find((item) => item.label === dataset.label);
+      return existing ? Object.assign(existing, dataset) : dataset;
+    });
+    comparisonChart.update("none");
+    return comparisonChart;
+  }
   return new Chart(canvas, {
     type: "line",
     data: { labels, datasets },
@@ -161,9 +171,14 @@ function modelTicker(model) {
 
 function renderModelGrid() {
   const grid = document.getElementById("modelChartGrid");
-  grid.innerHTML = "";
-  miniCharts.forEach((chart) => chart.destroy());
-  miniCharts.clear();
+  const models = dashboardData.meta.tracked_gpu_models;
+  miniCharts.forEach((chart, model) => {
+    if (!models.includes(model)) {
+      chart.canvas.closest(".model-card").remove();
+      chart.destroy();
+      miniCharts.delete(model);
+    }
+  });
 
   dashboardData.meta.tracked_gpu_models.forEach((model) => {
     const allPoints = dashboardData.benchmark_series[model] || [];
@@ -204,6 +219,18 @@ function renderModelGrid() {
           .join("")}
       </div>
     `;
+    const existingChart = miniCharts.get(model);
+    if (existingChart) {
+      const existingCard = existingChart.canvas.closest(".model-card");
+      // Refresh text without replacing the canvas or restarting its animation.
+      for (const selector of [".ticker-strip", ".model-card-head", ".mini-stats"]) {
+        existingCard.querySelector(selector).replaceWith(card.querySelector(selector));
+      }
+      existingChart.data.labels = points.map((point) => point.date);
+      existingChart.data.datasets[0].data = points.map((point) => point.value);
+      existingChart.update("none");
+      return;
+    }
     card.addEventListener("click", () => {
       window.location.href = `gpu.html?model=${encodeURIComponent(model)}&range=${encodeURIComponent(activeRange)}`;
     });
@@ -213,7 +240,6 @@ function renderModelGrid() {
 }
 
 function renderComparison() {
-  if (comparisonChart) comparisonChart.destroy();
   comparisonChart = createComparisonChart(document.getElementById("comparisonChart"));
 
   const ranked = dashboardData.meta.tracked_gpu_models
