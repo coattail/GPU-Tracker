@@ -58,7 +58,7 @@
       models.map(async (model) => {
         const baseModel = MERCATUS_MODEL_MAP[model];
         if (!baseModel) return [model, []];
-        const url = `${MERCATUS_TREND_URL}?range=90D&baseModel=${encodeURIComponent(baseModel)}`;
+        const url = `${MERCATUS_TREND_URL}?range=ALL&baseModel=${encodeURIComponent(baseModel)}`;
         const payload = await fetchJson(fetchFn, url);
         if (!payload.success) {
           const message = payload.error?.message || `Mercatus API failed for ${model}`;

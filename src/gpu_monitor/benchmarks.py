@@ -30,7 +30,7 @@ MERCATUS_MODEL_MAP = {
 def collect_mercatus_benchmarks(
     session: requests.Session | None = None,
     *,
-    range_name: str = "90D",
+    range_name: str = "ALL",
 ) -> dict[str, list[BenchmarkPoint]]:
     session = session or requests.Session()
     result: dict[str, list[BenchmarkPoint]] = {}
@@ -73,7 +73,7 @@ def merge_benchmark_series(
                 "value": point.value,
                 "source": point.source,
                 "quality": point.quality,
-                "note": "Unified 90-day public series",
+                "note": "Unified public historical series",
             }
             for point in public_points
         ]
@@ -94,7 +94,7 @@ def accumulate_benchmark_history(
                 "value": point.value,
                 "source": point.source,
                 "quality": point.quality,
-                "note": "Unified 90-day public series",
+                "note": "Unified public historical series",
             }
         accumulated[model] = [by_date[date] for date in sorted(by_date)]
     return accumulated

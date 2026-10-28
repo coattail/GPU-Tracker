@@ -36,7 +36,7 @@ def build_payload() -> dict:
             "unit": "GPU-hour",
             "tracked_gpu_models": list(TRACKED_GPU_MODELS),
             "primary_source": "Mercatus GPU Index",
-            "source_window": "90D",
+            "source_window": "ALL",
             "history_mode": "accumulated",
         },
         "benchmark_series": accumulated_series,
