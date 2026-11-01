@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-23",
+    "generated_at": "2026-10-24",
     "currency": "USD",
     "unit": "GPU-hour",
     "tracked_gpu_models": [
@@ -2167,6 +2167,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 4.1841,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
       }
     ],
     "H200": [
@@ -4315,6 +4322,13 @@
       {
         "date": "2026-10-23",
         "value": 5.3374,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 5.3573,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
@@ -6469,6 +6483,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 7.3376,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
       }
     ],
     "B300": [
@@ -8617,6 +8638,13 @@
       {
         "date": "2026-10-23",
         "value": 9.8853,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 10.01,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
@@ -10771,6 +10799,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 2.0874,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
       }
     ],
     "L40S": [
@@ -12919,6 +12954,13 @@
       {
         "date": "2026-10-23",
         "value": 1.5316,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 1.5344,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
@@ -15073,6 +15115,13 @@
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 0.5354,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
       }
     ],
     "RTX 5090": [
@@ -17221,6 +17270,13 @@
       {
         "date": "2026-10-23",
         "value": 0.7763,
+        "source": "Mercatus GPU Index",
+        "quality": "unified_daily",
+        "note": "Unified public historical series"
+      },
+      {
+        "date": "2026-10-24",
+        "value": 0.7814,
         "source": "Mercatus GPU Index",
         "quality": "unified_daily",
         "note": "Unified public historical series"
